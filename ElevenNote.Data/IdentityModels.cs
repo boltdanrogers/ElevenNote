@@ -1,4 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -23,11 +26,60 @@ namespace ElevenNote.Data
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
-        }
+        }//end of constructor
         
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
-        }
-    }
-}
+        }//end of method Create
+
+        public DbSet<Note> Notes { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Conventions
+                .Remove<PluralizingTableNameConvention>();
+
+            modelBuilder
+                .Configurations
+                .Add(new IdentityUserLoginConfiguration())
+                .Add(new IdentityUserRoleConfiguration());
+
+
+        }//end of method OnModelCreating
+
+
+
+    }//end of class ApplicationDbContext
+
+    //here is our first bit of add on
+    //we need a new class in this namespace
+
+    public class IdentityUserLoginConfiguration : EntityTypeConfiguration<IdentityUserLogin>
+    {
+        //just the constructor
+        public IdentityUserLoginConfiguration()
+        {
+            HasKey(iur => iur.UserId);
+        }//end of constructor
+
+    }//end of class IdentityUserLoginConfiguration
+
+
+    //and another class
+
+    public class IdentityUserRoleConfiguration : EntityTypeConfiguration<IdentityUserRole>
+    {
+        //constructor
+        public IdentityUserRoleConfiguration()
+        {
+            HasKey(iur => iur.UserId);
+        }//end of constructor
+
+
+    }//end of class IdentityUserRoleConfiguration
+
+
+
+}//end of namespace
