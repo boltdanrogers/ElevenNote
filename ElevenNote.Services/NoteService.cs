@@ -66,12 +66,37 @@ namespace ElevenNote.Services
 
                 return query.ToArray();
 
-
             }//end of using 
-
 
         }//end of method GetNotes
 
+        //now we need a get by Id method
+        public NoteDetail GetNoteById(int id)
+        {
+            //start with our using statement
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Notes
+                        .Single(e => e.NoteId == id && e.OwnerId == _userId);
+                return
+                    new NoteDetail
+                    {
+                        NoteId = entity.NoteId,
+                        Title = entity.Title,
+                        Content = entity.Content,
+                        CreatedUtc = entity.CreatedUtc,
+                        ModifiedUtc = entity.ModifiedUtc
+
+                    };//end of new noteDetail
+
+
+            }//end of using
+
+
+        }//end of method GetNoteById
 
     }//end of class NoteService
 }

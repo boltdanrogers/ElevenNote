@@ -50,8 +50,14 @@ namespace ElevenNote.WebAPI.Controllers
 
         }//end of method Post
 
+        //now we need our overloaded get method
+        public IHttpActionResult Get(int id)
+        {
+            NoteService noteService = CreateNoteService();
+            var note = noteService.GetNoteById(id);
+            return Ok(note);
 
-
+        }//end of overloaded get method
 
 
     }//end of class NoteController
