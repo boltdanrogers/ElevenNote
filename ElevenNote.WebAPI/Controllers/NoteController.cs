@@ -59,6 +59,30 @@ namespace ElevenNote.WebAPI.Controllers
 
         }//end of overloaded get method
 
+        //and our PUT method
+
+        public IHttpActionResult Put(NoteEdit note)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }//end of if no valid state
+
+            var service = CreateNoteService();
+
+            if (!service.UpdateNote(note))
+            {
+                return InternalServerError();
+            }//end of if not updated
+
+            //only get here if model state is valid and update note worked
+
+            return Ok();
+        }//end of method Put
+
+
+
+
 
     }//end of class NoteController
 }
