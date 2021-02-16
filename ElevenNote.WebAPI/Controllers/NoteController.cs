@@ -80,7 +80,21 @@ namespace ElevenNote.WebAPI.Controllers
             return Ok();
         }//end of method Put
 
+        //finally, we need our delete method
 
+        public IHttpActionResult Delete(int id)
+        {
+            var service = CreateNoteService();
+
+            if (!service.DeleteNote(id))
+            {
+                return InternalServerError();
+            }//end of if
+
+            return Ok();
+
+
+        }//end of method Delete
 
 
 
